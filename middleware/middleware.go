@@ -6,66 +6,65 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
 
 	"github.com/gorilla/mux"
-	"github.com/joho/godotenv"
+	// "github.com/joho/godotenv"
 	"github.com/piyush/golangtodobackend/models"
+
+	"github.com/piyush/golangtodobackend/database"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-var collection *mongo.Collection
+var collection *mongo.Collection = database.OpenCollection(database.Client, "todolist")
 
-func init() {
-	loadTheEnv()
-	// var Client *mongo.Client = createDBInstance()
+// func init() {
+// 	loadTheEnv()
+// }
 
-}
+// func loadTheEnv() {
+// 	err := godotenv.Load(".env")
+// 	if err != nil {
+// 		log.Fatal("Error loading the .env file")
+// 	}
+// }
 
-func loadTheEnv() {
-	err := godotenv.Load(".env")
-	if err != nil {
-		log.Fatal("Error loading the .env file")
-	}
-}
+// func createDBInstance() *mongo.Client {
+// 	connectionString := os.Getenv("DB_URI")
+// 	dbName := os.Getenv("DB_NAME")
+// 	collName := os.Getenv("DB_COLLECTION_NAME")
+// 	fmt.Printf("The connection string is : %v", connectionString)
+// 	clientOptions := options.Client().ApplyURI(connectionString)
 
-func createDBInstance() *mongo.Client {
-	connectionString := os.Getenv("DB_URI")
-	// dbName := os.Getenv("DB_NAME")
-	// collName := os.Getenv("DB_COLLECTION_NAME")
+// 	client, err := mongo.Connect(context.TODO(), clientOptions)
 
-	clientOptions := options.Client().ApplyURI(connectionString)
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
 
-	client, err := mongo.Connect(context.TODO(), clientOptions)
+// 	err = client.Ping(context.TODO(), nil)
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
 
-	if err != nil {
-		log.Fatal(err)
-	}
+// 	fmt.Println("connected to mongodb!")
 
-	err = client.Ping(context.TODO(), nil)
-	if err != nil {
-		log.Fatal(err)
-	}
+// 	collection = client.Database(dbName).Collection(collName)
+// 	fmt.Println("collection instance created")
 
-	fmt.Println("connected to mongodb!")
+// 	return client
 
-	// collection = client.Database(dbName).Collection(collName)
-	// fmt.Println("collection instance created")
-
-	return client
-
-}
+// }
 
 // dbName := os.Getenv("DB_NAME")
-var Client *mongo.Client = createDBInstance()
+// var Client *mongo.Client = createDBInstance()
 
-func OpenCollection(client *mongo.Client, collectionName string) *mongo.Collection {
-	var collection *mongo.Collection = client.Database("test").Collection(collectionName)
-	return collection
-}
+// func OpenCollection(client *mongo.Client, collectionName string) *mongo.Collection {
+
+// 	var collection *mongo.Collection = client.Database(os.Getenv("DB_NAME")).Collection(collectionName)
+// 	return collection
+// }
 
 func GetAllTasks(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/x-www-form-urlencoded")

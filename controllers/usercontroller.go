@@ -9,8 +9,8 @@ import (
 	"time"
 
 	"github.com/go-playground/validator/v10"
+	"github.com/piyush/golangtodobackend/database"
 	helper "github.com/piyush/golangtodobackend/helpers"
-	"github.com/piyush/golangtodobackend/middleware"
 	"github.com/piyush/golangtodobackend/models"
 	"golang.org/x/crypto/bcrypt"
 
@@ -19,7 +19,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-var userCollection *mongo.Collection = middleware.OpenCollection(middleware.Client, "user")
+var userCollection *mongo.Collection = database.OpenCollection(database.Client, "user")
 var validate = validator.New()
 
 func HashPassword(password string) string {

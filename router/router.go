@@ -9,8 +9,8 @@ import (
 
 func Router() *mux.Router {
 	router := mux.NewRouter()
-	router.HandleFunc("/api/signup", controllers.Signup).Methods("POST", "OPTIONS")
-	router.HandleFunc("/api/login", controllers.Login).Methods("POST", "OPTIONS")
+	router.HandleFunc("/signup", controllers.Signup).Methods("POST", "OPTIONS")
+	router.HandleFunc("/login", controllers.Login).Methods("POST", "OPTIONS")
 
 	authenticatedRouter := router.PathPrefix("/api").Subrouter()
 	authenticatedRouter.Use(middlewarebetween.Authenticate)
